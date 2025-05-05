@@ -43,3 +43,16 @@ public class Main {
 }
 
 Souhaites-tu que je te fournisse un projet .zip prêt à l’emploi avec Gson inclus ?
+
+
+
+
+
+
+
+
+Compiler :
+javac -cp gson-2.13.1.jar -d bin src/*.java
+
+Executer :
+java -cp bin:gson-2.13.1.jar Executable
