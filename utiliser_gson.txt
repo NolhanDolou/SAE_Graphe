@@ -56,3 +56,21 @@ javac -cp gson-2.13.1.jar -d bin src/*.java
 
 Executer :
 java -cp bin:gson-2.13.1.jar Executable
+
+
+
+
+orga des fichiers :
+
+test/
+|____src/
+    |
+    |___ *.java
+|
+|____bin/
+    |
+    |___ *.class
+|
+|____ data_100.txt
+|
+|____ gson machin ..
