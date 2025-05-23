@@ -24,9 +24,7 @@ public class CollaborationGraphBuilder {
                 Film film = gson.fromJson(reader, Film.class);
 
                 Set<String> participants = new HashSet<>();
-                if (film.cast != null) participants.addAll(film.cast);
-                ////if (film.directors != null) participants.addAll(cleanNames(film.directors));
-                ////if (film.producers != null) participants.addAll(cleanNames(film.producers));
+                if (film.cast != null) participants.addAll(cleanNames(film.cast));
 
                 for (String person : participants) {
                     graph.addVertex(person);
@@ -49,6 +47,21 @@ public class CollaborationGraphBuilder {
         return graph;
     }
 
+    private static List<String> cleanNames(List<String> rawNames) {
+        List<String> result = new ArrayList<>();
+        for (String raw : rawNames) {
+            if (raw.contains("[[")) {
+                String clean = raw.replaceAll("\\[\\[([^\\]|]+)(\\|([^\\]]+))?\\]\\]", "$3").trim();
+                if (clean.isEmpty()) {
+                    clean = raw.replaceAll("\\[\\[([^\\]|]+)\\]\\]", "$1");
+                }
+                result.add(clean);
+            } else {
+                result.add(raw.trim());
+            }
+        }
+        return result;
+    }
 
     public static Set<String> voisins(Graph<String, DefaultEdge> graphe, String personne){
         Set<String> lesVoisins = new HashSet<>();
@@ -67,34 +80,6 @@ public class CollaborationGraphBuilder {
         lesVoisinsCommuns.addAll(voisins(graphe, personne2));
         return lesVoisinsCommuns;
     }
-
-    /*  SAE Exploration algorithmique d'un problème
-
-    Voici l'algorithme permettant d'obtenir l'ensemble des collaborateurs à distance k d'un acteur ou d'une actrice. A vous de l'implémenter en JAVA
-
-    Algo collaborateurs_proches(G,u,k):
-        """Algorithme renvoyant l'ensemble des acteurs à distance au plus k de l'acteur u dans le graphe G. La fonction renvoie None si u est absent du graphe.
-        
-        Parametres:
-        G: le graphe
-        u: le sommet de départ
-        k: la distance depuis u
-    """
-    si u n'est pas un sommet de G:
-        afficher u+"est un illustre inconnu"
-        fin de l'algorithme
-
-    collaborateurs = Ensemble vide
-    Ajouter u à l'ensemble des collaborateurs
-    pour tout i allant de 1 à k:
-        collaborateurs_directs = Ensemble Vide
-        Pour tout collaborateur c dans l'ensemble des collaborateurs
-            Pour tout voisin v de c:
-                si v n'est pas dans l'ensemble des collaborateurs:
-                    Ajouter v à l'ensemble des collaborateurs_directs
-
-        Remplacer collaborateurs par l'union des collaborateurs et collaborateurs_directs
-    Renvoyer l'ensemble collaborateur*/
 
     public static Set<String> collaborateurs_proches(Graph<String, DefaultEdge> graphe,String personne,int distance){
         if(!(graphe.containsVertex(personne))){
@@ -115,5 +100,44 @@ public class CollaborationGraphBuilder {
             collaborateurs.addAll((collaborateurs_directs));
         }
         return collaborateurs;
+    }
+
+    public static int collaborateurs_distance(Graph<String, DefaultEdge> graphe,String personne, String personne2){
+        if(!(graphe.containsVertex(personne))||(!(graphe.containsVertex(personne2)))){
+            System.out.println(personne + " est un illustre inconnu.");
+            System.exit(0);
+        }
+        Set<String> collaborateurs = new HashSet<>();
+        int distance = 0;
+        collaborateurs.add(personne);
+        while(!(collaborateurs.contains(personne2))){
+            Set<String> collaborateurs_directs = new HashSet<>();
+            for(String collabo : collaborateurs){
+                for(String voisin : voisins(graphe, collabo)){
+                    if(!(collaborateurs.contains(voisin))){
+                        collaborateurs_directs.add(voisin);
+                    }
+                }
+            }
+            collaborateurs.addAll((collaborateurs_directs));
+            distance++;
+        }
+        return distance;
+    }
+
+    public static int centralite_personne(Graph<String, DefaultEdge> graphe,String personne){
+        if(!(graphe.containsVertex(personne))){
+            System.out.println(personne + " est un illustre inconnu.");
+            System.exit(0);
+        }
+        int max = 0;
+        for(String quelquun : graphe.vertexSet()){
+            int distance = collaborateurs_distance(graphe, personne, quelquun);
+            if(distance>max){
+                max = distance;
+            }
+        }
+        return max;
+
     }
 }
