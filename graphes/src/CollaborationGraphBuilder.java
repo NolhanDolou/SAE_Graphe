@@ -1,3 +1,7 @@
+//javac -d bin -cp "lib/*:src" src/*.java
+//java -cp "bin:lib/*" Executable 
+
+
 import com.google.gson.Gson;
 import com.google.gson.stream.JsonReader;
 import org.jgrapht.Graph;
@@ -59,12 +63,8 @@ public class CollaborationGraphBuilder {
 
     public static Set<String> voisinsCommuns(Graph<String, DefaultEdge> graphe, String personne,String personne2){
         Set<String> lesVoisinsCommuns = new HashSet<>();
-        for(String voisin : voisins(graphe, personne)){
-            lesVoisinsCommuns.add(voisin);
-        }
-        for(String voisin : voisins(graphe, personne2)){
-            lesVoisinsCommuns.add(voisin);
-        }
+        lesVoisinsCommuns.addAll(voisins(graphe, personne));
+        lesVoisinsCommuns.addAll(voisins(graphe, personne2));
         return lesVoisinsCommuns;
     }
 
@@ -92,6 +92,7 @@ public class CollaborationGraphBuilder {
             Pour tout voisin v de c:
                 si v n'est pas dans l'ensemble des collaborateurs:
                     Ajouter v à l'ensemble des collaborateurs_directs
+
         Remplacer collaborateurs par l'union des collaborateurs et collaborateurs_directs
     Renvoyer l'ensemble collaborateur*/
 
@@ -101,6 +102,18 @@ public class CollaborationGraphBuilder {
             System.exit(0);
         }
         Set<String> collaborateurs = new HashSet<>();
-        
+        collaborateurs.add(personne);
+        for(int i=1;i<distance;i++){
+            Set<String> collaborateurs_directs = new HashSet<>();
+            for(String collabo : collaborateurs){
+                for(String voisin : voisins(graphe, collabo)){
+                    if(!(collaborateurs.contains(voisin))){
+                        collaborateurs_directs.add(voisin);
+                    }
+                }
+            }
+            collaborateurs.addAll((collaborateurs_directs));
+        }
+        return collaborateurs;
     }
 }

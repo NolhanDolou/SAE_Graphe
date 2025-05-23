@@ -25,5 +25,8 @@ public static void main(String[] args) {
         System.out.println("Nombre de voisins de Ellen Greene : " +CollaborationGraphBuilder.voisins(graph, "[[Ellen Greene]]").size()+ CollaborationGraphBuilder.voisins(graph, "[[Ellen Greene]]")+"\n");
         System.out.println("Nombre de voisins de 2eme personne : " +  CollaborationGraphBuilder.voisins(graph, "[[Ryan O'Neal]]").size() +CollaborationGraphBuilder.voisins(graph, "[[Ryan O'Neal]]")+"\n");
         System.out.println("Nombre de voisins communs : " +CollaborationGraphBuilder.voisinsCommuns(graph,"[[Ellen Greene]]","[[Ryan O'Neal]]").size()+ CollaborationGraphBuilder.voisinsCommuns(graph,"[[Ellen Greene]]","[[Ryan O'Neal]]")+"\n");
+        
+        System.out.println("voisins de Ellen Greene x 1 : " +CollaborationGraphBuilder.collaborateurs_proches(graph, "[[Ellen Greene]]", 4).size()+ CollaborationGraphBuilder.collaborateurs_proches(graph, "[[Ellen Greene]]", 4)+"\n");
+
     }
 }
