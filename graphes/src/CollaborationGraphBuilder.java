@@ -138,6 +138,47 @@ public class CollaborationGraphBuilder {
             }
         }
         return max;
+    }
 
+    public static String centre_graphe(Graph<String, DefaultEdge> graphe){
+        String centre = null;
+        Integer min = null;
+        for(String quelquun : graphe.vertexSet()){
+            Integer distance = centralite_personne(graphe, quelquun);
+            if(min== null || distance<min){
+                min = distance;
+                centre= quelquun;
+            }
+        }
+        return centre;
+    }
+
+    public static int distance_max(Graph<String, DefaultEdge> graphe,String personne, String personne2){
+        if(!(graphe.containsVertex(personne))||(!(graphe.containsVertex(personne2)))){
+            System.out.println(personne + " est un illustre inconnu.");
+            System.exit(0);
+        }
+
+        Set<String> collaborateurs = new HashSet<>();
+        int max = 0;
+        int distance = 0;
+        collaborateurs.add(personne);
+        while((collaborateurs.size()< graphe.vertexSet().size()-1)){
+            Set<String> collaborateurs_directs = new HashSet<>();
+            for(String collabo : collaborateurs){
+                for(String voisin : voisins(graphe, collabo)){
+                    if(!(collaborateurs.contains(voisin))){
+                        collaborateurs_directs.add(voisin);
+                    }
+                    if(collaborateurs_directs.contains(personne2)){
+                        collaborateurs_directs.remove(personne2);
+                        max = distance+1;
+                    }
+                }
+            }
+            collaborateurs.addAll((collaborateurs_directs));
+            distance++;
+        }
+        return max;
     }
 }
