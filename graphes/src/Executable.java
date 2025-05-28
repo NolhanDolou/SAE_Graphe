@@ -18,7 +18,7 @@ import java.io.FileWriter;
 public class Executable{
 
 public static void main(String[] args) {
-        Graph<String, DefaultEdge> graph = CollaborationGraphBuilder.faireGraphe("./src/data_1000.json");
+        Graph<String, DefaultEdge> graph = CollaborationGraphBuilder.faireGraphe("./src/data_100.json");
         System.out.println("Nombre de personnes : " + graph.vertexSet().size());
         System.out.println("Nombre de collaborations : " + graph.edgeSet().size()+"\n");
 
@@ -26,13 +26,16 @@ public static void main(String[] args) {
         System.out.println("Nombre de voisins de 2eme personne : " +  CollaborationGraphBuilder.voisins(graph, "Roger Bart").size() +CollaborationGraphBuilder.voisins(graph, "Roger Bart")+"\n");
         System.out.println("Nombre de voisins communs : " +CollaborationGraphBuilder.voisinsCommuns(graph,"Roger Bart","Adrian Pasdar").size()+ CollaborationGraphBuilder.voisinsCommuns(graph,"Al Pacino","Adrian Pasdar")+"\n");
         
-        System.out.println("voisins de Al Pacino x 2 : " +CollaborationGraphBuilder.collaborateurs_proches(graph, "Al Pacino", 2).size()+ CollaborationGraphBuilder.collaborateurs_proches(graph, "Al Pacino", 2)+"\n");
-        System.out.println("distance Al Pacino 1111 : " +CollaborationGraphBuilder.collaborateurs_distance(graph, "Al Pacino", "Adrian Pasdar"));
-        System.out.println("distance Al Pacino  : " +CollaborationGraphBuilder.collaborateurs_distance(graph, "Al Pacino", "Al Pacino"));
-        //System.out.println("distance max Al Pacino  : " +CollaborationGraphBuilder.centralite_personne(graph, "Al Pacino"));
-        //System.out.println("distance max l'autre  : " +CollaborationGraphBuilder.centralite_personne(graph, "Adrian Pasdar"));
-        System.out.println("centre graphe : " + CollaborationGraphBuilder.centre_graphe(graph));
-        System.out.println("distance max 2 pers: " +CollaborationGraphBuilder.distance_max(graph, "Mădălina Diana Ghenea", "Renee Olstead"));
+        System.out.println("voisins de Al Pacino x 2 : " +CollaborationGraphBuilder.collaborateursProches(graph, "Al Pacino", 2).size()+ CollaborationGraphBuilder.collaborateursProches(graph, "Al Pacino", 2)+"\n");
+        System.out.println("distance Al Pacino 1111 : " +CollaborationGraphBuilder.collaborateursDistance(graph, "Al Pacino", "Adrian Pasdar"));
+        System.out.println("distance Al Pacino  : " +CollaborationGraphBuilder.collaborateursDistance(graph, "Al Pacino", "Al Pacino"));
+        //System.out.println("centralité Al Pacino  : " +CollaborationGraphBuilder.centralitePersonne(graph, "Al Pacino"));
+        //System.out.println("centralité qqun  : " +CollaborationGraphBuilder.centralitePersonne(graph, "Mădălina Diana Ghenea"));
+        //System.out.println("centre graphe : " + CollaborationGraphBuilder.centreGraphe(graph));
+        //System.out.println("distance max 2 pers: " +CollaborationGraphBuilder.distanceMax(graph, "Mădălina Diana Ghenea", "Renee Olstead"));
+        //System.out.println("distance moyenne : " +CollaborationGraphBuilder.distanceMoyenne(graph, "Al Pacino"));
+        
+        System.out.println("MIN distance moyenne : " +CollaborationGraphBuilder.minDistanceMoyenne(graph));
 
     }
 }

@@ -63,6 +63,7 @@ public class CollaborationGraphBuilder {
         return result;
     }
 
+    /* O(N)*/
     public static Set<String> voisins(Graph<String, DefaultEdge> graphe, String personne){
         Set<String> lesVoisins = new HashSet<>();
         for(DefaultEdge arete : graphe.edgesOf(personne)){
@@ -74,14 +75,15 @@ public class CollaborationGraphBuilder {
         return lesVoisins;
     }
 
+    /* O(N) */
     public static Set<String> voisinsCommuns(Graph<String, DefaultEdge> graphe, String personne,String personne2){
         Set<String> lesVoisinsCommuns = new HashSet<>();
         lesVoisinsCommuns.addAll(voisins(graphe, personne));
         lesVoisinsCommuns.addAll(voisins(graphe, personne2));
         return lesVoisinsCommuns;
     }
-
-    public static Set<String> collaborateurs_proches(Graph<String, DefaultEdge> graphe,String personne,int distance){
+    /* O(N³) */
+    public static Set<String> collaborateursProches(Graph<String, DefaultEdge> graphe,String personne,int distance){
         if(!(graphe.containsVertex(personne))){
             System.out.println(personne + " est un illustre inconnu.");
             System.exit(0);
@@ -101,8 +103,8 @@ public class CollaborationGraphBuilder {
         }
         return collaborateurs;
     }
-
-    public static int collaborateurs_distance(Graph<String, DefaultEdge> graphe,String personne, String personne2){
+    /* O(N³) */
+    public static int collaborateursDistance(Graph<String, DefaultEdge> graphe,String personne, String personne2){
         if(!(graphe.containsVertex(personne))||(!(graphe.containsVertex(personne2)))){
             System.out.println(personne + " est un illustre inconnu.");
             System.exit(0);
@@ -125,26 +127,28 @@ public class CollaborationGraphBuilder {
         return distance;
     }
 
-    public static int centralite_personne(Graph<String, DefaultEdge> graphe,String personne){
+    /* O(n⁴) */
+    public static int centralitePersonne(Graph<String, DefaultEdge> graphe,String personne){
         if(!(graphe.containsVertex(personne))){
             System.out.println(personne + " est un illustre inconnu.");
             System.exit(0);
         }
+
         int max = 0;
         for(String quelquun : graphe.vertexSet()){
-            int distance = collaborateurs_distance(graphe, personne, quelquun);
+            int distance = collaborateursDistance(graphe, personne, quelquun);
             if(distance>max){
                 max = distance;
             }
         }
         return max;
     }
-
-    public static String centre_graphe(Graph<String, DefaultEdge> graphe){
+    /* O(N⁵) */
+    public static String centreGraphe(Graph<String, DefaultEdge> graphe){
         String centre = null;
         Integer min = null;
         for(String quelquun : graphe.vertexSet()){
-            Integer distance = centralite_personne(graphe, quelquun);
+            Integer distance = centralitePersonne(graphe, quelquun);
             if(min== null || distance<min){
                 min = distance;
                 centre= quelquun;
@@ -152,8 +156,8 @@ public class CollaborationGraphBuilder {
         }
         return centre;
     }
-
-    public static int distance_max(Graph<String, DefaultEdge> graphe,String personne, String personne2){
+    /* O(N³) */
+    public static int distanceMax(Graph<String, DefaultEdge> graphe,String personne, String personne2){
         if(!(graphe.containsVertex(personne))||(!(graphe.containsVertex(personne2)))){
             System.out.println(personne + " est un illustre inconnu.");
             System.exit(0);
@@ -180,5 +184,33 @@ public class CollaborationGraphBuilder {
             distance++;
         }
         return max;
+    }
+
+    /* O(N⁴) */
+    public static double distanceMoyenne(Graph<String, DefaultEdge> graphe,String personne){
+        if(!(graphe.containsVertex(personne))){
+            System.out.println(personne + " est un illustre inconnu.");
+            System.exit(0);
+        }
+
+        int somme = 0;
+        for(String qqun : graphe.vertexSet()){
+            somme+= collaborateursDistance(graphe, personne, qqun);
+    }
+    return somme/graphe.vertexSet().size();
+    }
+
+    /* O(N⁵) */
+    public static String minDistanceMoyenne(Graph<String, DefaultEdge> graphe){
+        Double min = null;
+        String persMin = null;
+        for(String quelquun : graphe.vertexSet()){
+            Double distance = distanceMoyenne(graphe, quelquun);
+            if(min== null || distance<min){
+                min = distance;
+                persMin = quelquun;
+            }
+        }
+        return persMin;
     }
 }
