@@ -18,24 +18,43 @@ import java.io.FileWriter;
 public class Executable{
 
 public static void main(String[] args) {
-        Graph<String, DefaultEdge> graph = CollaborationGraphBuilder.faireGraphe("./src/data_100.json");
-        System.out.println("Nombre de personnes : " + graph.vertexSet().size());
-        System.out.println("Nombre de collaborations : " + graph.edgeSet().size()+"\n");
+    //3.1 Echauffement
+        //Création du graphe + nb sommets et arêtes
+        Graph<String, DefaultEdge> graph = Requetes.faireGraphe("./src/data_100.json");
+        System.out.println("Nombre de personnes dans le graphe (sommets) : " + graph.vertexSet().size()+"\n");
+        System.out.println("Nombre de collaborations dans le graphe (arêtes): " + graph.edgeSet().size()+"\n");
 
-        System.out.println("Nombre de voisins de Adrian Pasdar : " +CollaborationGraphBuilder.voisins(graph, "Adrian Pasdar").size()+ CollaborationGraphBuilder.voisins(graph, "Adrian Pasdar")+"\n");
-        System.out.println("Nombre de voisins de 2eme personne : " +  CollaborationGraphBuilder.voisins(graph, "Roger Bart").size() +CollaborationGraphBuilder.voisins(graph, "Roger Bart")+"\n");
-        System.out.println("Nombre de voisins communs : " +CollaborationGraphBuilder.voisinsCommuns(graph,"Roger Bart","Adrian Pasdar").size()+ CollaborationGraphBuilder.voisinsCommuns(graph,"Al Pacino","Adrian Pasdar")+"\n");
+
+    //3.2 Collaborateurs en communs
+        //Voisins d'une personne
+        System.out.println("Nombre de voisins de Adrian Pasdar + ensemble des voisins: " +Requetes.voisins(graph, "Adrian Pasdar").size()+ Requetes.voisins(graph, "Adrian Pasdar")+"\n");
+        //Voisins en communs entre deux acteurs
+        System.out.println("Nombre de voisins communs + ensemble des voisins : " +Requetes.voisinsCommuns(graph,"Roger Bart","Adrian Pasdar").size()+ Requetes.voisinsCommuns(graph,"Roger Bart","Adrian Pasdar")+"\n");
         
-        System.out.println("voisins de Al Pacino x 2 : " +CollaborationGraphBuilder.collaborateursProches(graph, "Al Pacino", 2).size()+ CollaborationGraphBuilder.collaborateursProches(graph, "Al Pacino", 2)+"\n");
-        System.out.println("distance Al Pacino 1111 : " +CollaborationGraphBuilder.collaborateursDistance(graph, "Al Pacino", "Adrian Pasdar"));
-        System.out.println("distance Al Pacino  : " +CollaborationGraphBuilder.collaborateursDistance(graph, "Al Pacino", "Al Pacino"));
-        //System.out.println("centralité Al Pacino  : " +CollaborationGraphBuilder.centralitePersonne(graph, "Al Pacino"));
-        //System.out.println("centralité qqun  : " +CollaborationGraphBuilder.centralitePersonne(graph, "Mădălina Diana Ghenea"));
-        //System.out.println("centre graphe : " + CollaborationGraphBuilder.centreGraphe(graph));
-        //System.out.println("distance max 2 pers: " +CollaborationGraphBuilder.distanceMax(graph, "Mădălina Diana Ghenea", "Renee Olstead"));
-        //System.out.println("distance moyenne : " +CollaborationGraphBuilder.distanceMoyenne(graph, "Al Pacino"));
+
+    //3.3 Collaborateurs proches
+        //Implémentation du pseudo-code 
+        System.out.println("voisins de Al Pacino distance 2 : " +Requetes.collaborateursProches(graph, "Al Pacino", 2).size()+ Requetes.collaborateursProches(graph, "Al Pacino", 2)+"\n");
+        //distance entre deux acteurs
+        System.out.println("distance Al Pacino - Adrian Pasdar : " +Requetes.distanceMinDeuxPersonnes(graph, "Al Pacino", "Adrian Pasdar"));
+    
+    
+    //3.4 Qui est au centre d'Hollywood ?
+        // Centralité d'un acteur
+        System.out.println("centralité Al Pacino  : " +Requetes.centralitePersonne(graph, "Al Pacino"));
+        //Acteur le plus central du graphe
+        /* data 100: Al Pacino*/
+        System.out.println("centre graphe : " + Requetes.centreGraphe(graph));
         
-        System.out.println("MIN distance moyenne : " +CollaborationGraphBuilder.minDistanceMoyenne(graph));
+    //3.5 Une petite famille
+        //Distance maximum entre deux acteurs donnés
+        System.out.println("distance max deux acteurs: " +Requetes.distanceMaxDeuxPersonnes(graph, "Mădălina Diana Ghenea", "Renee Olstead"));
+        //Distance maximum entre toute paire d'acteurs
+        System.out.println("max distance max"+ Requetes.maxdistanceMax(graph));
+        //Distance moyenne entre un acteur et tous les autres
+        System.out.println("distance moyenne : " +Requetes.distanceMoyenne(graph, "Al Pacino"));
+        //Personne avec la plus petite distance moyenne du graphe
+        System.out.println("MIN distance moyenne : " +Requetes.minDistanceMoyenne(graph));
 
     }
 }
