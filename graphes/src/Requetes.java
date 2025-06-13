@@ -64,6 +64,10 @@ public class Requetes {
 
     /* O(N)*/
     public static Set<String> voisins(Graph<String, DefaultEdge> graphe, String personne){
+        if(!(graphe.containsVertex(personne))){
+            System.out.println(personne + " est un illustre inconnu.");
+            System.exit(0);
+        }
         Set<String> lesVoisins = new HashSet<>();
         for(DefaultEdge arete : graphe.edgesOf(personne)){
             if(!(graphe.getEdgeSource(arete).equals(personne))){
@@ -74,11 +78,23 @@ public class Requetes {
         return lesVoisins;
     }
 
-    /* O(N) */
+    /* O(N²) */
     public static Set<String> voisinsCommuns(Graph<String, DefaultEdge> graphe, String personne,String personne2){
+        if(!(graphe.containsVertex(personne))||voisins(graphe, personne).isEmpty()){
+            System.out.println(personne + " est un illustre inconnu.");
+            return  null;
+        }
+        if(!((graphe.containsVertex(personne2)))||voisins(graphe, personne2).isEmpty()){
+            System.out.println(personne2 + " est un illustre inconnu.");
+            return null;
+        }
+
         Set<String> lesVoisinsCommuns = new HashSet<>();
-        lesVoisinsCommuns.addAll(voisins(graphe, personne));
-        lesVoisinsCommuns.addAll(voisins(graphe, personne2));
+        for (String voisin : voisins(graphe, personne)){
+            if(voisins(graphe, personne2).contains(voisin)){
+                lesVoisinsCommuns.add(voisin);
+            }
+        }
         return lesVoisinsCommuns;
     }
     /* O(N³) */
@@ -103,7 +119,7 @@ public class Requetes {
         return collaborateurs;
     }
     /* O(N³) */
-    public static int distanceMinDeuxPersonnes(Graph<String, DefaultEdge> graphe,String personne, String personne2){
+    public static int distanceDeuxPersonnes(Graph<String, DefaultEdge> graphe,String personne, String personne2){
         if(!(graphe.containsVertex(personne))){
             System.out.println(personne + " est un illustre inconnu.");
             System.exit(0);
@@ -139,7 +155,7 @@ public class Requetes {
 
         int max = 0;
         for(String quelquun : graphe.vertexSet()){
-            int distance = distanceMinDeuxPersonnes(graphe, personne, quelquun);
+            int distance = distanceDeuxPersonnes(graphe, personne, quelquun);
             if(distance>max){
                 max = distance;
             }
@@ -160,46 +176,13 @@ public class Requetes {
         return centre;
     }
 
-    /* O(N³) */
-    public static int distanceMaxDeuxPersonnes(Graph<String, DefaultEdge> graphe,String personne, String personne2){
-        if(!(graphe.containsVertex(personne))){
-            System.out.println(personne + " est un illustre inconnu.");
-            System.exit(0);
-        }
-        if(!((graphe.containsVertex(personne2)))){
-            System.out.println(personne2 + " est un illustre inconnu.");
-            System.exit(0);
-        }
-
-        Set<String> collaborateurs = new HashSet<>();
-        int max = 0;
-        int distance = 0;
-        collaborateurs.add(personne);
-        while((collaborateurs.size()< graphe.vertexSet().size()-1)){
-            Set<String> collaborateurs_directs = new HashSet<>();
-            for(String collabo : collaborateurs){
-                for(String voisin : voisins(graphe, collabo)){
-                    if(!(collaborateurs.contains(voisin))){
-                        collaborateurs_directs.add(voisin);
-                    }
-                    if(collaborateurs_directs.contains(personne2)){
-                        collaborateurs_directs.remove(personne2);
-                        max = distance+1;
-                    }
-                }
-            }
-            collaborateurs.addAll((collaborateurs_directs));
-            distance++;
-        }
-        return max;
-    }
      /*O(N⁵) */
     public static Integer maxdistanceMax (Graph<String, DefaultEdge> graphe){
         Integer max = null;
         for(String quelquun : graphe.vertexSet()){
             for(String autre : graphe.vertexSet()){
                 if(!(quelquun.equals(autre))){
-                    Integer distance = distanceMaxDeuxPersonnes(graphe, quelquun,autre);
+                    Integer distance = distanceDeuxPersonnes(graphe, quelquun,autre);
                     if(max== null || max<distance){
                         max = distance;
                     }}
@@ -217,7 +200,7 @@ public class Requetes {
         int somme = 0;
         for(String qqun : graphe.vertexSet()){
             if(!(personne.equals(qqun))){
-            somme+= distanceMinDeuxPersonnes(graphe, personne, qqun);}
+            somme+= distanceDeuxPersonnes(graphe, personne, qqun);}
     }
     return somme/graphe.vertexSet().size();
     }

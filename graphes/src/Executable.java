@@ -24,6 +24,7 @@ public static void main(String[] args) {
         System.out.println("Nombre de personnes dans le graphe (sommets) : " + graph.vertexSet().size()+"\n");
         System.out.println("Nombre de collaborations dans le graphe (arêtes): " + graph.edgeSet().size()+"\n");
 
+        System.out.println("max distance deux acteurs"+ Requetes.maxdistanceMax(graph));
 
     //3.2 Collaborateurs en communs
         //Voisins d'une personne
@@ -36,21 +37,18 @@ public static void main(String[] args) {
         //Implémentation du pseudo-code 
         System.out.println("voisins de Al Pacino distance 2 : " +Requetes.collaborateursProches(graph, "Al Pacino", 2).size()+ Requetes.collaborateursProches(graph, "Al Pacino", 2)+"\n");
         //distance entre deux acteurs
-        System.out.println("distance Al Pacino - Adrian Pasdar : " +Requetes.distanceMinDeuxPersonnes(graph, "Al Pacino", "Adrian Pasdar"));
+        System.out.println("distance Al Pacino - Adrian Pasdar : " +Requetes.distanceDeuxPersonnes(graph, "Al Pacino", "Adrian Pasdar"));
     
     
     //3.4 Qui est au centre d'Hollywood ?
         // Centralité d'un acteur
         System.out.println("centralité Al Pacino  : " +Requetes.centralitePersonne(graph, "Al Pacino"));
         //Acteur le plus central du graphe
-        /* data 100: Al Pacino*/
         System.out.println("centre graphe : " + Requetes.centreGraphe(graph));
         
     //3.5 Une petite famille
-        //Distance maximum entre deux acteurs donnés
-        System.out.println("distance max deux acteurs: " +Requetes.distanceMaxDeuxPersonnes(graph, "Mădălina Diana Ghenea", "Renee Olstead"));
         //Distance maximum entre toute paire d'acteurs
-        System.out.println("max distance max"+ Requetes.maxdistanceMax(graph));
+        System.out.println("max distance deux acteurs"+ Requetes.maxdistanceMax(graph));
         //Distance moyenne entre un acteur et tous les autres
         System.out.println("distance moyenne : " +Requetes.distanceMoyenne(graph, "Al Pacino"));
         //Personne avec la plus petite distance moyenne du graphe
